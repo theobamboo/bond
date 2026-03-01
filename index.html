@@ -332,6 +332,54 @@
           </div>
         </header>
 
+        <!-- LIVE DATA BANNER -->
+        <div id="live-data-banner" class="mb-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <!-- DXY Live -->
+          <div class="sim-card p-3 flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider">🇺🇸 DXY</p>
+              <p id="live-dxy-val" class="text-lg font-bold text-slate-100 mt-0.5">--.---</p>
+            </div>
+            <div class="text-right">
+              <p id="live-dxy-chg" class="text-sm font-semibold">+0.00%</p>
+              <span id="live-dxy-bucket"
+                class="text-xs bg-slate-700 px-2 py-0.5 rounded-full text-slate-300 mt-1 inline-block">STABLE</span>
+            </div>
+          </div>
+          <!-- US10Y Live -->
+          <div class="sim-card p-3 flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider">📈 US 10Y</p>
+              <p id="live-10y-val" class="text-lg font-bold text-slate-100 mt-0.5">--.---</p>
+            </div>
+            <div class="text-right">
+              <p id="live-10y-chg" class="text-sm font-semibold">+0.00%</p>
+              <span id="live-10y-bucket"
+                class="text-xs bg-slate-700 px-2 py-0.5 rounded-full text-slate-300 mt-1 inline-block">FLAT</span>
+            </div>
+          </div>
+          <!-- VIX Live -->
+          <div class="sim-card p-3 flex items-center justify-between">
+            <div>
+              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider">🌪️ VIX</p>
+              <p id="live-vix-val" class="text-lg font-bold text-slate-100 mt-0.5">--.--</p>
+            </div>
+            <div class="text-right">
+              <p id="live-vix-chg" class="text-sm font-semibold">+0.00%</p>
+              <span id="live-vix-bucket"
+                class="text-xs bg-slate-700 px-2 py-0.5 rounded-full text-slate-300 mt-1 inline-block">CALM</span>
+            </div>
+          </div>
+        </div>
+        <!-- Last updated timestamp + manual override toggle -->
+        <div class="flex items-center justify-between mb-4">
+          <p id="live-timestamp" class="text-xs text-slate-600">⏳ Loading live data...</p>
+          <button onclick="toggleLiveMode()" id="live-mode-btn"
+            class="text-xs px-3 py-1.5 rounded-full border border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 transition">
+            🔴 Live Mode ON
+          </button>
+        </div>
+
         <!-- navigation refined -->
         <nav class="flex space-x-6 mb-6 border-b border-slate-800 text-sm font-medium">
           <button onclick="showSimTab('simulator-main', this)"

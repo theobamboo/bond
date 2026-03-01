@@ -574,4 +574,106 @@ function runSimulation() {
 document.addEventListener('DOMContentLoaded', () => {
   // wait for DOM to fully render, then run initially so right values appear
   setTimeout(runSimulation, 50);
+  // Start live data fetch loop
+  fetchLiveData();
 });
+
+/* -------------------------------------------
+   Live Data Integration
+------------------------------------------- */
+let liveMode = true;
+let livePollInterval = null;
+const LIVE_POLL_MS = 60000; // every 60 seconds
+
+const BUCKET_LABELS = {
+  dxy: { up: '⬆️ RISING', down: '⬇️ DUMPING', neutral: '➡️ STABLE' },
+  us10y: { up: '🔥 SPIKING', down: '❄️ FALLING', neutral: '➡️ FLAT' },
+  vix: { high: '😱 PANIC', mid: '😐 ELEVATED', low: '😌 CALM' }
+};
+
+const BUCKET_COLORS = {
+  up: 'text-red-400', down: 'text-green-400', neutral: 'text-slate-300',
+  high: 'text-red-400', mid: 'text-yellow-400', low: 'text-green-400'
+};
+
+function fetchLiveData() {
+  fetch('live_data.json?t=' + Date.now())
+    .then(r => r.json())
+    .then(data => {
+      updateLiveBanner(data);
+      if (liveMode) applyLiveDataToSim(data);
+    })
+    .catch(() => {
+      const el = document.getElementById('live-timestamp');
+      if (el) el.textContent = '⚠️ No live data found — run fetch_live_data.py to enable';
+    });
+}
+
+function updateLiveBanner(data) {
+  // DXY
+  setText('live-dxy-val', data.dxy.value?.toFixed(3) ?? '--');
+  setText('live-dxy-chg', (data.dxy.change_pct >= 0 ? '+' : '') + data.dxy.change_pct?.toFixed(2) + '%');
+  setBucketBadge('live-dxy-bucket', 'dxy', data.dxy.bucket);
+  setColor('live-dxy-chg', data.dxy.change_pct >= 0 ? 'text-red-400' : 'text-green-400');
+
+  // US10Y
+  setText('live-10y-val', data.us10y.value?.toFixed(3) + '%' ?? '--');
+  setText('live-10y-chg', (data.us10y.change_pct >= 0 ? '+' : '') + data.us10y.change_pct?.toFixed(2) + '%');
+  setBucketBadge('live-10y-bucket', 'us10y', data.us10y.bucket);
+  setColor('live-10y-chg', data.us10y.change_pct >= 0 ? 'text-red-400' : 'text-green-400');
+
+  // VIX
+  setText('live-vix-val', data.vix.value?.toFixed(2) ?? '--');
+  setText('live-vix-chg', (data.vix.change_pct >= 0 ? '+' : '') + data.vix.change_pct?.toFixed(2) + '%');
+  setBucketBadge('live-vix-bucket', 'vix', data.vix.bucket);
+  setColor('live-vix-chg', data.vix.change_pct >= 0 ? 'text-orange-400' : 'text-green-400');
+
+  // Timestamp
+  const ts = data.timestamp ? new Date(data.timestamp).toLocaleTimeString() : '--';
+  setText('live-timestamp', '🟢 Last updated: ' + ts + ' UTC');
+}
+
+function applyLiveDataToSim(data) {
+  const dxyEl = document.getElementById('dxy-input');
+  const yieldEl = document.getElementById('yield-input');
+  const vixEl = document.getElementById('vix-input');
+  if (dxyEl) dxyEl.value = data.dxy.bucket;
+  if (yieldEl) yieldEl.value = data.us10y.bucket;
+  if (vixEl) vixEl.value = data.vix.bucket;
+  runSimulation();
+}
+
+function toggleLiveMode() {
+  liveMode = !liveMode;
+  const btn = document.getElementById('live-mode-btn');
+  if (liveMode) {
+    btn.textContent = '🔴 Live Mode ON';
+    btn.className = 'text-xs px-3 py-1.5 rounded-full border border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/10 transition';
+    fetchLiveData(); // immediate refresh
+    livePollInterval = setInterval(fetchLiveData, LIVE_POLL_MS);
+  } else {
+    btn.textContent = '⚪ Live Mode OFF';
+    btn.className = 'text-xs px-3 py-1.5 rounded-full border border-slate-600 text-slate-400 hover:bg-slate-700 transition';
+    clearInterval(livePollInterval);
+  }
+}
+
+// helpers
+function setText(id, val) { const el = document.getElementById(id); if (el) el.textContent = val; }
+function setColor(id, cls) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.className = el.className.replace(/text-\S+/g, '') + ' ' + cls;
+}
+function setBucketBadge(id, type, bucket) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const label = (BUCKET_LABELS[type] || {})[bucket] || bucket.toUpperCase();
+  const color = BUCKET_COLORS[bucket] || 'text-slate-300';
+  el.textContent = label;
+  el.className = `text-xs px-2 py-0.5 rounded-full mt-1 inline-block font-semibold bg-slate-800 ${color}`;
+}
+
+// Start polling every 60s
+livePollInterval = setInterval(fetchLiveData, LIVE_POLL_MS);
+
