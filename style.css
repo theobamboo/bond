@@ -315,7 +315,7 @@ h1 {
   color: var(--text-primary);
 }
 
-.legend-item.hidden {
+.legend-item.legend-dimmed {
   opacity: 0.4;
   text-decoration: line-through;
 }
@@ -331,92 +331,94 @@ h1 {
   flex: 1;
   position: relative;
   width: 100%;
-}/* Global App Navigation Space */
+}
+
+/* Global App Navigation Space */
 .global-app-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 60px;
-    background: var(--bg-card);
-    border-bottom: 1px solid var(--border-light);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 24px;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 1000;
 }
 
 .nav-branding {
-    display: flex;
-    align-items: center;
-    gap: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .nav-icon {
-    font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .nav-title {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.01em;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
 }
 
 .nav-tabs {
-    display: flex;
-    gap: 12px;
-    height: 100%;
-    align-items: flex-end;
+  display: flex;
+  gap: 12px;
+  height: 100%;
+  align-items: flex-end;
 }
 
 .app-tab-btn {
-    background: transparent;
-    border: none;
-    color: var(--text-secondary);
-    font-family: 'Inter', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    padding: 12px 20px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    border-bottom: 3px solid transparent;
-    transition: all 0.2s ease;
-    height: 100%;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: 'Inter', sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 12px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  border-bottom: 3px solid transparent;
+  transition: all 0.2s ease;
+  height: 100%;
 }
 
 .app-tab-btn:hover {
-    color: var(--text-primary);
-    background: rgba(255, 255, 255, 0.03);
+  color: var(--text-primary);
+  background: rgba(255, 255, 255, 0.03);
 }
 
 .app-tab-btn.active {
-    color: var(--text-primary);
-    border-bottom-color: var(--color-us);
-    background: rgba(0, 210, 255, 0.05);
-    /* very light cyan */
+  color: var(--text-primary);
+  border-bottom-color: var(--color-us);
+  background: rgba(0, 210, 255, 0.05);
+  /* very light cyan */
 }
 
 .app-view {
-    display: none;
-    width: 100%;
-    height: calc(100vh - 60px);
-    /* Account for global nav */
-    margin-top: 60px;
-    /* Account for global nav */
+  display: none;
+  width: 100%;
+  height: calc(100vh - 60px);
+  /* Account for global nav */
+  margin-top: 60px;
+  /* Account for global nav */
 }
 
 .app-view.active {
-    display: block;
+  display: block;
 }
 
 /* Original Dashboard fix for new wrapper height */
 .dashboard-container {
-    height: 100%;
-    max-height: 100%;
+  height: 100%;
+  max-height: 100%;
 }
 
 
@@ -424,98 +426,98 @@ h1 {
    Simulator Custom Styles overrides
 ------------------------------------------- */
 #app-simulator {
-    background: #0b1120;
-    color: #e2e8f0;
-    font-family: 'Inter', system-ui, sans-serif;
-    overflow-y: auto;
+  background: #0b1120;
+  color: #e2e8f0;
+  font-family: 'Inter', system-ui, sans-serif;
+  overflow-y: auto;
 }
 
 .sim-card {
-    background: #1a2639;
-    border: 1px solid #2d3a4f;
-    border-radius: 20px;
-    box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.8);
-    transition: all 0.2s ease;
+  background: #1a2639;
+  border: 1px solid #2d3a4f;
+  border-radius: 20px;
+  box-shadow: 0 12px 24px -12px rgba(0, 0, 0, 0.8);
+  transition: all 0.2s ease;
 }
 
 .sim-card:hover {
-    border-color: #3e506a;
+  border-color: #3e506a;
 }
 
 /* custom utilities */
 .pill {
-    padding: 4px 16px;
-    border-radius: 40px;
-    font-size: 0.7rem;
-    font-weight: 600;
-    letter-spacing: 0.3px;
+  padding: 4px 16px;
+  border-radius: 40px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
 
 /* traffic light – refined */
 .indicator-light {
-    width: 16px;
-    height: 16px;
-    border-radius: 16px;
-    display: inline-block;
-    margin-right: 6px;
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+  width: 16px;
+  height: 16px;
+  border-radius: 16px;
+  display: inline-block;
+  margin-right: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
 }
 
 .light-green {
-    background: #10b981;
-    box-shadow: 0 0 12px #10b981cc;
+  background: #10b981;
+  box-shadow: 0 0 12px #10b981cc;
 }
 
 .light-yellow {
-    background: #f59e0b;
-    box-shadow: 0 0 12px #f59e0bbb;
+  background: #f59e0b;
+  box-shadow: 0 0 12px #f59e0bbb;
 }
 
 .light-red {
-    background: #ef4444;
-    box-shadow: 0 0 12px #ef4444cc;
+  background: #ef4444;
+  box-shadow: 0 0 12px #ef4444cc;
 }
 
 .light-off {
-    background: #334155;
-    box-shadow: none;
+  background: #334155;
+  box-shadow: none;
 }
 
 /* tabs */
 .sim-tab-content {
-    display: none;
+  display: none;
 }
 
 .sim-tab-content.active {
-    display: block;
+  display: block;
 }
 
 .sim-inner-tab {
-    cursor: pointer;
-    transition: all 0.15s;
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
 /* select inputs */
 .sim-select {
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>');
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 1rem;
-    appearance: none;
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  appearance: none;
 }
 
 .sim-select option {
-    background: #1a2639;
-    color: #f1f5f9;
+  background: #1a2639;
+  color: #f1f5f9;
 }
 
 /* subtle animation */
 #result-box,
 #vix-warning {
-    transition: all 0.25s;
+  transition: all 0.25s;
 }
 
 .stat-value {
-    transition: color 0.2s;
+  transition: color 0.2s;
 }

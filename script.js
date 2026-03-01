@@ -133,14 +133,14 @@ function toggleDataset(index) {
     [4, 5, 6].forEach(i => {
       yieldChart.getDatasetMeta(i).hidden = true;
       const leg = document.querySelector(`.legend-item[data-dataset="${i}"]`);
-      if (leg) leg.classList.add('hidden');
+      if (leg) leg.classList.add('legend-dimmed');
     });
 
     // If it was hidden, show it. If it was already showing, leave it hidden (toggle off behavior)
     if (isCurrentlyHidden) {
       meta.hidden = false;
       const legendItem = document.querySelector(`.legend-item[data-dataset="${index}"]`);
-      if (legendItem) legendItem.classList.remove('hidden');
+      if (legendItem) legendItem.classList.remove('legend-dimmed');
     }
 
     // Check if any non-bond is visible to determine if right Y-axis should show
@@ -159,9 +159,9 @@ function toggleDataset(index) {
     const legendItem = document.querySelector(`.legend-item[data-dataset="${index}"]`);
     if (legendItem) {
       if (meta.hidden) {
-        legendItem.classList.add('hidden');
+        legendItem.classList.add('legend-dimmed');
       } else {
-        legendItem.classList.remove('hidden');
+        legendItem.classList.remove('legend-dimmed');
       }
     }
   }
@@ -400,20 +400,20 @@ document.addEventListener('DOMContentLoaded', init);
    Global App Tab Switching
 ------------------------------------------- */
 function switchAppTab(tabId, btnElement) {
-    // Hide all app views
-    document.querySelectorAll('.app-view').forEach(t => t.classList.remove('active', 'hidden'));
-    document.querySelectorAll('.app-view').forEach(t => {
-        if (t.id !== tabId) t.classList.add('hidden');
-    });
-    document.getElementById(tabId).classList.add('active');
+  // Hide all app views
+  document.querySelectorAll('.app-view').forEach(t => t.classList.remove('active', 'hidden'));
+  document.querySelectorAll('.app-view').forEach(t => {
+    if (t.id !== tabId) t.classList.add('hidden');
+  });
+  document.getElementById(tabId).classList.add('active');
 
-    // Update nav buttons
-    document.querySelectorAll('.app-tab-btn').forEach(btn => {
-        btn.classList.remove('active');
-    });
-    if (btnElement) {
-        btnElement.classList.add('active');
-    }
+  // Update nav buttons
+  document.querySelectorAll('.app-tab-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  if (btnElement) {
+    btnElement.classList.add('active');
+  }
 }
 
 /* -------------------------------------------
@@ -421,157 +421,157 @@ function switchAppTab(tabId, btnElement) {
 ------------------------------------------- */
 // tab system within simulator
 function showSimTab(tabId, btnElement) {
-    document.querySelectorAll('.sim-tab-content').forEach(t => {
-        t.classList.remove('active');
-        t.classList.add('hidden');
-    });
+  document.querySelectorAll('.sim-tab-content').forEach(t => {
+    t.classList.remove('active');
+    t.classList.add('hidden');
+  });
 
-    document.querySelectorAll('.sim-inner-tab').forEach(btn => {
-        btn.classList.remove('text-blue-400', 'border-b-2', 'border-blue-500');
-        btn.classList.add('text-slate-400');
-    });
+  document.querySelectorAll('.sim-inner-tab').forEach(btn => {
+    btn.classList.remove('text-blue-400', 'border-b-2', 'border-blue-500');
+    btn.classList.add('text-slate-400');
+  });
 
-    document.getElementById(tabId).classList.remove('hidden');
-    document.getElementById(tabId).classList.add('active');
+  document.getElementById(tabId).classList.remove('hidden');
+  document.getElementById(tabId).classList.add('active');
 
-    if (btnElement) {
-        btnElement.classList.add('text-blue-400', 'border-b-2', 'border-blue-500');
-        btnElement.classList.remove('text-slate-400');
-    }
+  if (btnElement) {
+    btnElement.classList.add('text-blue-400', 'border-b-2', 'border-blue-500');
+    btnElement.classList.remove('text-slate-400');
+  }
 }
 
 // set traffic light by id
 function setLight(id, color) {
-    const el = document.getElementById(id);
-    if (el) {
-        el.className = `indicator-light light-${color}`;
-    }
+  const el = document.getElementById(id);
+  if (el) {
+    el.className = `indicator-light light-${color}`;
+  }
 }
 
 // main simulation logic
 function runSimulation() {
-    const dxy = document.getElementById('dxy-input').value;
-    const yieldVal = document.getElementById('yield-input').value;
-    const vix = document.getElementById('vix-input').value;
+  const dxy = document.getElementById('dxy-input').value;
+  const yieldVal = document.getElementById('yield-input').value;
+  const vix = document.getElementById('vix-input').value;
 
-    // elements
-    const forecast = document.getElementById('forecast-text');
-    const status = document.getElementById('system-status');
-    const priceTag = document.getElementById('price-tag');
-    const vixWarn = document.getElementById('vix-warning');
-    const vixBody = document.getElementById('vix-alert-body');
-    const vixTitle = document.getElementById('vix-alert-title');
-    const rVal = document.getElementById('risk-val');
-    const lVal = document.getElementById('liq-val');
-    const pStat = document.getElementById('pricing-status');
-    const mmStat = document.getElementById('mm-status');
+  // elements
+  const forecast = document.getElementById('forecast-text');
+  const status = document.getElementById('system-status');
+  const priceTag = document.getElementById('price-tag');
+  const vixWarn = document.getElementById('vix-warning');
+  const vixBody = document.getElementById('vix-alert-body');
+  const vixTitle = document.getElementById('vix-alert-title');
+  const rVal = document.getElementById('risk-val');
+  const lVal = document.getElementById('liq-val');
+  const pStat = document.getElementById('pricing-status');
+  const mmStat = document.getElementById('mm-status');
 
-    // ----- VIX logic + market maker status -----
-    if (vix === 'high') {
-        vixWarn.classList.remove('hidden');
-        vixWarn.className = "mt-5 p-3 bg-red-900/20 border border-red-500/40 rounded-xl text-xs text-red-400 flex items-start gap-2 transition-all duration-250";
-        vixTitle.innerText = "🚨 VIX PANIC:";
-        vixBody.innerText = "Market makers stepping back. Spreads blown out, liquidity holes.";
-        mmStat.innerText = "STEPPING BACK";
-        mmStat.className = "text-2xl font-bold text-red-500 transition-colors duration-200";
-    } else if (vix === 'mid') {
-        vixWarn.classList.remove('hidden');
-        vixWarn.className = "mt-5 p-3 bg-yellow-900/20 border border-yellow-500/40 rounded-xl text-xs text-yellow-400 flex items-start gap-2 transition-all duration-250";
-        vixTitle.innerText = "⚠️ VIX ELEVATED:";
-        vixBody.innerText = "Spreads widening, liquidity thinning out.";
-        mmStat.innerText = "CAUTIOUS";
-        mmStat.className = "text-2xl font-bold text-yellow-500 transition-colors duration-200";
+  // ----- VIX logic + market maker status -----
+  if (vix === 'high') {
+    vixWarn.classList.remove('hidden');
+    vixWarn.className = "mt-5 p-3 bg-red-900/20 border border-red-500/40 rounded-xl text-xs text-red-400 flex items-start gap-2 transition-all duration-250";
+    vixTitle.innerText = "🚨 VIX PANIC:";
+    vixBody.innerText = "Market makers stepping back. Spreads blown out, liquidity holes.";
+    mmStat.innerText = "STEPPING BACK";
+    mmStat.className = "text-2xl font-bold text-red-500 transition-colors duration-200";
+  } else if (vix === 'mid') {
+    vixWarn.classList.remove('hidden');
+    vixWarn.className = "mt-5 p-3 bg-yellow-900/20 border border-yellow-500/40 rounded-xl text-xs text-yellow-400 flex items-start gap-2 transition-all duration-250";
+    vixTitle.innerText = "⚠️ VIX ELEVATED:";
+    vixBody.innerText = "Spreads widening, liquidity thinning out.";
+    mmStat.innerText = "CAUTIOUS";
+    mmStat.className = "text-2xl font-bold text-yellow-500 transition-colors duration-200";
+  } else {
+    vixWarn.classList.add('hidden');
+    mmStat.innerText = "PROVIDING";
+    mmStat.className = "text-2xl font-bold text-blue-400 transition-colors duration-200";
+  }
+
+  // ----- bond price tag & status -----
+  if (yieldVal === 'up') {
+    priceTag.innerText = "🔥 DISCOUNT";
+    priceTag.className = "text-[0.7rem] font-black uppercase bg-red-900/60 text-red-300 px-3 py-1.5 rounded-full border border-red-500/40 tracking-wide";
+    pStat.innerText = "DISCOUNT";
+    pStat.className = "text-2xl font-bold text-red-400 transition-colors duration-200";
+  } else if (yieldVal === 'down') {
+    priceTag.innerText = "✨ PREMIUM";
+    priceTag.className = "text-[0.7rem] font-black uppercase bg-green-900/60 text-green-300 px-3 py-1.5 rounded-full border border-green-500/40 tracking-wide";
+    pStat.innerText = "PREMIUM";
+    pStat.className = "text-2xl font-bold text-green-400 transition-colors duration-200";
+  } else {
+    priceTag.innerText = "⚪ PAR";
+    priceTag.className = "text-[0.7rem] font-black uppercase bg-slate-700/80 text-slate-300 px-3 py-1.5 rounded-full tracking-wide";
+    pStat.innerText = "AT PAR";
+    pStat.className = "text-2xl font-bold text-blue-400 transition-colors duration-200";
+  }
+
+  // base light colors
+  let crypto = 'green', tech = 'green', indices = 'green', futures = 'green', options = 'green', commodities = 'green';
+
+  // --- SCENARIO MATRIX ---
+  if (dxy === 'up' && yieldVal === 'up') {
+    forecast.innerHTML = "<span class='text-red-400 font-bold'>💧 LIQUIDITY VACUUM.</span> Bonds at discount. DXY sucking cash + spiking yields → systemic stress. Leveraged loops unwinding.";
+    status.innerHTML = '<span class="relative flex h-2 w-2 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-red-400"></span></span> pipes clogged';
+    status.className = "pill bg-red-500/20 text-red-300 border border-red-500/30 flex items-center gap-1.5";
+    rVal.innerText = vix === 'high' ? 'EXTREME' : 'CRITICAL';
+    rVal.className = "text-2xl font-bold text-red-500 transition-colors duration-200";
+    lVal.innerText = "DRY";
+    lVal.className = "text-2xl font-bold text-red-500 transition-colors duration-200";
+    crypto = 'red'; tech = 'red'; indices = 'red'; futures = 'red'; options = 'red'; commodities = 'red';
+  }
+  else if (dxy === 'down' && yieldVal === 'down') {
+    if (vix === 'high' || vix === 'mid') {
+      forecast.innerHTML = "<span class='text-yellow-400 font-bold'>🏛️ FLIGHT TO SAFETY (fear).</span> Money flees stocks → bonds. DXY down, but risk assets under pressure. Gold bid.";
+      status.innerHTML = '<span class="relative flex h-2 w-2 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-400"></span></span> caution';
+      status.className = "pill bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 flex items-center gap-1.5";
+      rVal.innerText = "HIGH";
+      rVal.className = "text-2xl font-bold text-yellow-500 transition-colors duration-200";
+      lVal.innerText = "STABLE";
+      lVal.className = "text-2xl font-bold text-slate-200 transition-colors duration-200";
+      crypto = 'yellow'; tech = 'yellow'; indices = 'red'; futures = 'yellow'; options = 'red'; commodities = 'green';
     } else {
-        vixWarn.classList.add('hidden');
-        mmStat.innerText = "PROVIDING";
-        mmStat.className = "text-2xl font-bold text-blue-400 transition-colors duration-200";
+      forecast.innerHTML = "<span class='text-green-400 font-bold'>✨ GOLDILOCKS ZONE.</span> Risk-on, liquidity returning. Bonds at premium, yields settle. Bullish for equities and crypto.";
+      status.innerHTML = '<span class="relative flex h-2 w-2 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span></span> flowing';
+      status.className = "pill bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5";
+      rVal.innerText = "LOW";
+      rVal.className = "text-2xl font-bold text-green-500 transition-colors duration-200";
+      lVal.innerText = "PLENTIFUL";
+      lVal.className = "text-2xl font-bold text-green-500 transition-colors duration-200";
+      crypto = 'green'; tech = 'green'; indices = 'green'; futures = 'green'; options = 'green'; commodities = 'green';
     }
+  }
+  else if (dxy === 'up' && yieldVal === 'down') {
+    forecast.innerHTML = "<strong>🛡️ DEFENSIVE FLIGHT.</strong> Bonds at premium, investors buy bonds + hold cash (DXY up). Caution in risk assets.";
+    status.innerHTML = '<span class="relative flex h-2 w-2 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-400"></span></span> caution';
+    status.className = "pill bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 flex items-center gap-1.5";
+    rVal.innerText = "HIGH";
+    rVal.className = "text-2xl font-bold text-yellow-500 transition-colors duration-200";
+    lVal.innerText = "TIGHT";
+    lVal.className = "text-2xl font-bold text-yellow-500 transition-colors duration-200";
+    crypto = 'yellow'; tech = 'yellow'; indices = 'yellow'; futures = 'yellow'; options = 'yellow'; commodities = 'yellow';
+  }
+  else {  // neutral mix
+    forecast.innerHTML = "📡 Markets searching for direction. Monitor DXY & VIX. Plumbing holds stable for now.";
+    status.innerHTML = '<span class="relative flex h-2 w-2 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-400"></span></span> pipes clear';
+    status.className = "pill bg-blue-500/20 text-blue-300 border border-blue-500/30 flex items-center gap-1.5";
+    rVal.innerText = vix === 'mid' ? 'ELEVATED' : 'MODERATE';
+    rVal.className = "text-2xl font-bold text-slate-200 transition-colors duration-200";
+    lVal.innerText = "STABLE";
+    lVal.className = "text-2xl font-bold text-slate-200 transition-colors duration-200";
+    crypto = 'yellow'; tech = 'yellow'; indices = 'yellow'; futures = 'yellow'; options = 'yellow'; commodities = 'yellow';
+  }
 
-    // ----- bond price tag & status -----
-    if (yieldVal === 'up') {
-        priceTag.innerText = "🔥 DISCOUNT";
-        priceTag.className = "text-[0.7rem] font-black uppercase bg-red-900/60 text-red-300 px-3 py-1.5 rounded-full border border-red-500/40 tracking-wide";
-        pStat.innerText = "DISCOUNT";
-        pStat.className = "text-2xl font-bold text-red-400 transition-colors duration-200";
-    } else if (yieldVal === 'down') {
-        priceTag.innerText = "✨ PREMIUM";
-        priceTag.className = "text-[0.7rem] font-black uppercase bg-green-900/60 text-green-300 px-3 py-1.5 rounded-full border border-green-500/40 tracking-wide";
-        pStat.innerText = "PREMIUM";
-        pStat.className = "text-2xl font-bold text-green-400 transition-colors duration-200";
-    } else {
-        priceTag.innerText = "⚪ PAR";
-        priceTag.className = "text-[0.7rem] font-black uppercase bg-slate-700/80 text-slate-300 px-3 py-1.5 rounded-full tracking-wide";
-        pStat.innerText = "AT PAR";
-        pStat.className = "text-2xl font-bold text-blue-400 transition-colors duration-200";
-    }
-
-    // base light colors
-    let crypto = 'green', tech = 'green', indices = 'green', futures = 'green', options = 'green', commodities = 'green';
-
-    // --- SCENARIO MATRIX ---
-    if (dxy === 'up' && yieldVal === 'up') {
-        forecast.innerHTML = "<span class='text-red-400 font-bold'>💧 LIQUIDITY VACUUM.</span> Bonds at discount. DXY sucking cash + spiking yields → systemic stress. Leveraged loops unwinding.";
-        status.innerHTML = '<span class="relative flex h-2 w-2 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-red-400"></span></span> pipes clogged';
-        status.className = "pill bg-red-500/20 text-red-300 border border-red-500/30 flex items-center gap-1.5";
-        rVal.innerText = vix === 'high' ? 'EXTREME' : 'CRITICAL';
-        rVal.className = "text-2xl font-bold text-red-500 transition-colors duration-200";
-        lVal.innerText = "DRY";
-        lVal.className = "text-2xl font-bold text-red-500 transition-colors duration-200";
-        crypto = 'red'; tech = 'red'; indices = 'red'; futures = 'red'; options = 'red'; commodities = 'red';
-    }
-    else if (dxy === 'down' && yieldVal === 'down') {
-        if (vix === 'high' || vix === 'mid') {
-            forecast.innerHTML = "<span class='text-yellow-400 font-bold'>🏛️ FLIGHT TO SAFETY (fear).</span> Money flees stocks → bonds. DXY down, but risk assets under pressure. Gold bid.";
-            status.innerHTML = '<span class="relative flex h-2 w-2 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-400"></span></span> caution';
-            status.className = "pill bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 flex items-center gap-1.5";
-            rVal.innerText = "HIGH";
-            rVal.className = "text-2xl font-bold text-yellow-500 transition-colors duration-200";
-            lVal.innerText = "STABLE";
-            lVal.className = "text-2xl font-bold text-slate-200 transition-colors duration-200";
-            crypto = 'yellow'; tech = 'yellow'; indices = 'red'; futures = 'yellow'; options = 'red'; commodities = 'green';
-        } else {
-            forecast.innerHTML = "<span class='text-green-400 font-bold'>✨ GOLDILOCKS ZONE.</span> Risk-on, liquidity returning. Bonds at premium, yields settle. Bullish for equities and crypto.";
-            status.innerHTML = '<span class="relative flex h-2 w-2 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span></span> flowing';
-            status.className = "pill bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5";
-            rVal.innerText = "LOW";
-            rVal.className = "text-2xl font-bold text-green-500 transition-colors duration-200";
-            lVal.innerText = "PLENTIFUL";
-            lVal.className = "text-2xl font-bold text-green-500 transition-colors duration-200";
-            crypto = 'green'; tech = 'green'; indices = 'green'; futures = 'green'; options = 'green'; commodities = 'green';
-        }
-    }
-    else if (dxy === 'up' && yieldVal === 'down') {
-        forecast.innerHTML = "<strong>🛡️ DEFENSIVE FLIGHT.</strong> Bonds at premium, investors buy bonds + hold cash (DXY up). Caution in risk assets.";
-        status.innerHTML = '<span class="relative flex h-2 w-2 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-yellow-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-yellow-400"></span></span> caution';
-        status.className = "pill bg-yellow-500/20 text-yellow-300 border border-yellow-500/30 flex items-center gap-1.5";
-        rVal.innerText = "HIGH";
-        rVal.className = "text-2xl font-bold text-yellow-500 transition-colors duration-200";
-        lVal.innerText = "TIGHT";
-        lVal.className = "text-2xl font-bold text-yellow-500 transition-colors duration-200";
-        crypto = 'yellow'; tech = 'yellow'; indices = 'yellow'; futures = 'yellow'; options = 'yellow'; commodities = 'yellow';
-    }
-    else {  // neutral mix
-        forecast.innerHTML = "📡 Markets searching for direction. Monitor DXY & VIX. Plumbing holds stable for now.";
-        status.innerHTML = '<span class="relative flex h-2 w-2 mr-1"><span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span><span class="relative inline-flex rounded-full h-2 w-2 bg-blue-400"></span></span> pipes clear';
-        status.className = "pill bg-blue-500/20 text-blue-300 border border-blue-500/30 flex items-center gap-1.5";
-        rVal.innerText = vix === 'mid' ? 'ELEVATED' : 'MODERATE';
-        rVal.className = "text-2xl font-bold text-slate-200 transition-colors duration-200";
-        lVal.innerText = "STABLE";
-        lVal.className = "text-2xl font-bold text-slate-200 transition-colors duration-200";
-        crypto = 'yellow'; tech = 'yellow'; indices = 'yellow'; futures = 'yellow'; options = 'yellow'; commodities = 'yellow';
-    }
-
-    // set all lights
-    setLight('light-crypto', crypto);
-    setLight('light-tech', tech);
-    setLight('light-indices', indices);
-    setLight('light-futures', futures);
-    setLight('light-options', options);
-    setLight('light-commodities', commodities);
+  // set all lights
+  setLight('light-crypto', crypto);
+  setLight('light-tech', tech);
+  setLight('light-indices', indices);
+  setLight('light-futures', futures);
+  setLight('light-options', options);
+  setLight('light-commodities', commodities);
 }
 
 // Ensure simulation initializes on fresh DOM load when the tab opens
 document.addEventListener('DOMContentLoaded', () => {
-    // wait for DOM to fully render, then run initially so right values appear
-    setTimeout(runSimulation, 50);
+  // wait for DOM to fully render, then run initially so right values appear
+  setTimeout(runSimulation, 50);
 });
