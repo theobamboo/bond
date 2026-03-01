@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Bond Yields Dashboard</title>
+
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+  <div class="dashboard-container">
+    <header class="header">
+      <div class="header-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="title-icon">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+        <h1>Macro Plumbing Desk - Global Yields</h1>
+      </div>
+      <div class="controls">
+        <div class="control-group">
+          <label>Maturity:</label>
+          <div class="button-group" id="maturity-toggles">
+            <button class="toggle-btn" data-val="y2">2Y</button>
+            <button class="toggle-btn active" data-val="y10">10Y</button>
+            <button class="toggle-btn" data-val="y30">30Y</button>
+          </div>
+        </div>
+        <div class="control-group">
+          <label>Timeframe:</label>
+          <div class="button-group" id="timeframe-toggles">
+            <button class="toggle-btn active" data-val="1D">1D</button>
+            <button class="toggle-btn" data-val="1W">1W</button>
+            <button class="toggle-btn" data-val="1M">1M</button>
+            <button class="toggle-btn" data-val="1Y">1Y</button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <!-- Left Sidebar: Metric Cards -->
+      <aside class="metrics-sidebar">
+        <!-- US Card -->
+        <div class="metric-card" id="card-us">
+          <div class="card-header">
+            <h3>United States</h3>
+            <span class="flag">🇺🇸</span>
+          </div>
+          <div class="primary-metric">
+            <span class="value" id="us-val">--</span>
+            <span class="unit">%</span>
+          </div>
+          <p class="subtitle">Current Yield</p>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 75%; background-color: var(--color-us);"></div>
+          </div>
+
+          <div class="secondary-metrics">
+            <div class="sub-metric">
+              <span class="label">Curve Shape</span>
+              <span class="val" id="us-curve">Normal</span>
+            </div>
+            <div class="sub-metric">
+              <span class="label">1D Delta</span>
+              <span class="val delta down" id="us-delta">-4 bps</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- UK Card -->
+        <div class="metric-card" id="card-uk">
+          <div class="card-header">
+            <h3>United Kingdom</h3>
+            <span class="flag">🇬🇧</span>
+          </div>
+          <div class="primary-metric">
+            <span class="value" id="uk-val">--</span>
+            <span class="unit">%</span>
+          </div>
+          <p class="subtitle">Current Yield</p>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 80%; background-color: var(--color-uk);"></div>
+          </div>
+
+          <div class="secondary-metrics">
+            <div class="sub-metric">
+              <span class="label">Curve Shape</span>
+              <span class="val" id="uk-curve">Normal</span>
+            </div>
+            <div class="sub-metric">
+              <span class="label">1D Delta</span>
+              <span class="val delta down" id="uk-delta">-4 bps</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- EU Card -->
+        <div class="metric-card" id="card-eu">
+          <div class="card-header">
+            <h3>European Union</h3>
+            <span class="flag">🇪🇺</span>
+          </div>
+          <div class="primary-metric">
+            <span class="value" id="eu-val">--</span>
+            <span class="unit">%</span>
+          </div>
+          <p class="subtitle">Current Yield (Germany)</p>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 60%; background-color: var(--color-eu);"></div>
+          </div>
+
+          <div class="secondary-metrics">
+            <div class="sub-metric">
+              <span class="label">Curve Shape</span>
+              <span class="val" id="eu-curve">Normal</span>
+            </div>
+            <div class="sub-metric">
+              <span class="label">1D Delta</span>
+              <span class="val delta down" id="eu-delta">-1 bps</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- JP Card -->
+        <div class="metric-card" id="card-jp">
+          <div class="card-header">
+            <h3>Japan</h3>
+            <span class="flag">🇯🇵</span>
+          </div>
+          <div class="primary-metric">
+            <span class="value" id="jp-val">--</span>
+            <span class="unit">%</span>
+          </div>
+          <p class="subtitle">Current Yield</p>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 45%; background-color: var(--color-jp);"></div>
+          </div>
+
+          <div class="secondary-metrics">
+            <div class="sub-metric">
+              <span class="label">Curve Shape</span>
+              <span class="val" id="jp-curve">Normal</span>
+            </div>
+            <div class="sub-metric">
+              <span class="label">1D Delta</span>
+              <span class="val delta down" id="jp-delta">-2 bps</span>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Right Main: Chart Area -->
+      <section class="chart-section">
+        <div class="chart-header">
+          <h2 id="chart-title">10Y Sovereign Yields</h2>
+          <div class="legend-custom">
+            <span class="legend-item" data-dataset="0"><span class="color-box"
+                style="background: var(--color-us)"></span> US</span>
+            <span class="legend-item" data-dataset="1"><span class="color-box"
+                style="background: var(--color-uk)"></span> UK</span>
+            <span class="legend-item" data-dataset="2"><span class="color-box"
+                style="background: var(--color-eu)"></span> EU</span>
+            <span class="legend-item" data-dataset="3"><span class="color-box"
+                style="background: var(--color-jp)"></span> JP</span>
+          </div>
+        </div>
+        <div class="chart-container">
+          <canvas id="yieldChart"></canvas>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
