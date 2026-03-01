@@ -14,257 +14,533 @@
   <!-- Styles -->
   <link rel="stylesheet" href="style.css">
 
+  <!-- Tailwind CDN for Simulator -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 
 <body>
 
-  <div class="dashboard-container">
-    <header class="header">
-      <div class="header-title">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
-          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="title-icon">
-          <line x1="12" y1="1" x2="12" y2="23"></line>
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+  <!-- Global App Navigation Space -->
+  <div class="global-app-nav">
+    <div class="nav-branding">
+      <span class="nav-icon">🛠️</span>
+      <span class="nav-title">Global Markets & Plumbing</span>
+    </div>
+    <div class="nav-tabs">
+      <button class="app-tab-btn active" onclick="switchAppTab('app-yields', this)">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
         </svg>
-        <h1>Macro Plumbing Desk - Global Yields</h1>
+        Global Yields Dashboard
+      </button>
+      <button class="app-tab-btn" onclick="switchAppTab('app-simulator', this)">
+        <span class="sim-icon">🚦</span>
+        Macro Plumbing Simulator
+      </button>
+    </div>
+  </div>
+
+  <!-- Wrapper for existing Dashboard -->
+  <div id="app-yields" class="app-view active">
+    <!-- START ORIGINAL DASHBOARD -->
+    <div class="dashboard-container">
+      <header class="header">
+        <div class="header-title">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="title-icon">
+            <line x1="12" y1="1" x2="12" y2="23"></line>
+            <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+          </svg>
+          <h1>Macro Plumbing Desk - Global Yields</h1>
+        </div>
+        <div class="controls">
+          <div class="control-group">
+            <label>Maturity:</label>
+            <div class="button-group" id="maturity-toggles">
+              <button class="toggle-btn" data-val="y2">2Y</button>
+              <button class="toggle-btn active" data-val="y10">10Y</button>
+              <button class="toggle-btn" data-val="y30">30Y</button>
+            </div>
+          </div>
+          <div class="control-group">
+            <label>Timeframe:</label>
+            <div class="button-group" id="timeframe-toggles">
+              <button class="toggle-btn active" data-val="1D">1D</button>
+              <button class="toggle-btn" data-val="1W">1W</button>
+              <button class="toggle-btn" data-val="1M">1M</button>
+              <button class="toggle-btn" data-val="1Y">1Y</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <!-- Left Sidebar: Metric Cards -->
+        <aside class="metrics-sidebar">
+          <!-- US Card -->
+          <div class="metric-card" id="card-us">
+            <div class="card-header">
+              <h3>United States</h3>
+              <span class="flag">🇺🇸</span>
+            </div>
+            <div class="primary-metric">
+              <span class="value" id="us-val">--</span>
+              <span class="unit">%</span>
+            </div>
+            <p class="subtitle">Current Yield</p>
+
+            <div class="progress-bar-container">
+              <div class="progress-bar" style="width: 75%; background-color: var(--color-us);"></div>
+            </div>
+
+            <div class="secondary-metrics">
+              <div class="sub-metric">
+                <span class="label">Curve Shape</span>
+                <span class="val" id="us-curve">Normal</span>
+              </div>
+              <div class="sub-metric">
+                <span class="label">1D Delta</span>
+                <span class="val delta down" id="us-delta">-4 bps</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- UK Card -->
+          <div class="metric-card" id="card-uk">
+            <div class="card-header">
+              <h3>United Kingdom</h3>
+              <span class="flag">🇬🇧</span>
+            </div>
+            <div class="primary-metric">
+              <span class="value" id="uk-val">--</span>
+              <span class="unit">%</span>
+            </div>
+            <p class="subtitle">Current Yield</p>
+
+            <div class="progress-bar-container">
+              <div class="progress-bar" style="width: 80%; background-color: var(--color-uk);"></div>
+            </div>
+
+            <div class="secondary-metrics">
+              <div class="sub-metric">
+                <span class="label">Curve Shape</span>
+                <span class="val" id="uk-curve">Normal</span>
+              </div>
+              <div class="sub-metric">
+                <span class="label">1D Delta</span>
+                <span class="val delta down" id="uk-delta">-4 bps</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- EU Card -->
+          <div class="metric-card" id="card-eu">
+            <div class="card-header">
+              <h3>European Union</h3>
+              <span class="flag">🇪🇺</span>
+            </div>
+            <div class="primary-metric">
+              <span class="value" id="eu-val">--</span>
+              <span class="unit">%</span>
+            </div>
+            <p class="subtitle">Current Yield (Germany)</p>
+
+            <div class="progress-bar-container">
+              <div class="progress-bar" style="width: 60%; background-color: var(--color-eu);"></div>
+            </div>
+
+            <div class="secondary-metrics">
+              <div class="sub-metric">
+                <span class="label">Curve Shape</span>
+                <span class="val" id="eu-curve">Normal</span>
+              </div>
+              <div class="sub-metric">
+                <span class="label">1D Delta</span>
+                <span class="val delta down" id="eu-delta">-1 bps</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- JP Card -->
+          <div class="metric-card" id="card-jp">
+            <div class="card-header">
+              <h3>Japan</h3>
+              <span class="flag">🇯🇵</span>
+            </div>
+            <div class="primary-metric">
+              <span class="value" id="jp-val">--</span>
+              <span class="unit">%</span>
+            </div>
+            <p class="subtitle">Current Yield</p>
+
+            <div class="progress-bar-container">
+              <div class="progress-bar" style="width: 45%; background-color: var(--color-jp);"></div>
+            </div>
+
+            <div class="secondary-metrics">
+              <div class="sub-metric">
+                <span class="label">Curve Shape</span>
+                <span class="val" id="jp-curve">Normal</span>
+              </div>
+              <div class="sub-metric">
+                <span class="label">1D Delta</span>
+                <span class="val delta down" id="jp-delta">-2 bps</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- BTC Card -->
+          <div class="metric-card" id="card-btc">
+            <div class="card-header">
+              <h3>Bitcoin</h3>
+              <span class="flag">₿</span>
+            </div>
+            <div class="primary-metric">
+              <span class="unit">$</span>
+              <span class="value" id="btc-val">--</span>
+            </div>
+            <p class="subtitle">Current Price</p>
+
+            <div class="progress-bar-container">
+              <div class="progress-bar" style="width: 50%; background-color: var(--color-btc);"></div>
+            </div>
+
+            <div class="secondary-metrics">
+              <div class="sub-metric">
+                <span class="label">24H Change</span>
+                <span class="val delta up" id="btc-delta">+--%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- SPX Card -->
+          <div class="metric-card" id="card-spx">
+            <div class="card-header">
+              <h3>S&P 500</h3>
+              <span class="flag">📈</span>
+            </div>
+            <div class="primary-metric">
+              <span class="unit">$</span>
+              <span class="value" id="spx-val">--</span>
+            </div>
+            <p class="subtitle">Current Index</p>
+
+            <div class="progress-bar-container">
+              <div class="progress-bar" style="width: 50%; background-color: var(--color-spx);"></div>
+            </div>
+
+            <div class="secondary-metrics">
+              <div class="sub-metric">
+                <span class="label">1D Change</span>
+                <span class="val delta up" id="spx-delta">+--%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- NDAQ Card -->
+          <div class="metric-card" id="card-ndaq">
+            <div class="card-header">
+              <h3>Nasdaq</h3>
+              <span class="flag">🚀</span>
+            </div>
+            <div class="primary-metric">
+              <span class="unit">$</span>
+              <span class="value" id="ndaq-val">--</span>
+            </div>
+            <p class="subtitle">Current Index</p>
+
+            <div class="progress-bar-container">
+              <div class="progress-bar" style="width: 50%; background-color: var(--color-ndaq);"></div>
+            </div>
+
+            <div class="secondary-metrics">
+              <div class="sub-metric">
+                <span class="label">1D Change</span>
+                <span class="val delta up" id="ndaq-delta">+--%</span>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        <!-- Right Main: Chart Area -->
+        <section class="chart-section">
+          <div class="chart-header">
+            <h2 id="chart-title">10Y Sovereign Yields</h2>
+            <div class="legend-custom">
+              <span class="legend-item" data-dataset="0"><span class="color-box"
+                  style="background: var(--color-us)"></span> US</span>
+              <span class="legend-item" data-dataset="1"><span class="color-box"
+                  style="background: var(--color-uk)"></span> UK</span>
+              <span class="legend-item" data-dataset="2"><span class="color-box"
+                  style="background: var(--color-eu)"></span> EU</span>
+              <span class="legend-item" data-dataset="3"><span class="color-box"
+                  style="background: var(--color-jp)"></span> JP</span>
+              <span class="legend-item hidden" data-dataset="4"><span class="color-box"
+                  style="background: var(--color-btc)"></span> BTC</span>
+              <span class="legend-item hidden" data-dataset="5"><span class="color-box"
+                  style="background: var(--color-spx)"></span> SPX</span>
+              <span class="legend-item hidden" data-dataset="6"><span class="color-box"
+                  style="background: var(--color-ndaq)"></span> NDAQ</span>
+            </div>
+          </div>
+          <div class="chart-container">
+            <canvas id="yieldChart"></canvas>
+          </div>
+        </section>
+      </main>
+    </div>
+    <!-- END ORIGINAL DASHBOARD -->
+  </div>
+
+  <!-- Wrapper for New Plumbing Simulator -->
+  <div id="app-simulator" class="app-view hidden">
+    <!-- We inject the simulator inside the tailwind reset zone so it styles correctly but doesn't bleed out -->
+    <div class="simulator-wrapper antialiased p-4 md:p-8">
+      <div class="max-w-5xl mx-auto text-slate-200">
+        <!-- header with emoji accent -->
+        <header class="mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+          <div class="flex items-center gap-2">
+            <div class="text-4xl drop-shadow-lg">🛠️</div>
+            <div>
+              <h1 class="text-3xl font-bold tracking-tight flex flex-wrap items-center gap-2">
+                <span>Antigravity</span>
+                <span class="bg-gradient-to-r from-sky-400 to-blue-400 bg-clip-text text-transparent">Plumbing</span>
+                <span>Dashboard</span>
+              </h1>
+              <p class="text-slate-500 mt-0.5 text-sm">retail macro intel · liquidity & bond plumbing</p>
+            </div>
+          </div>
+          <div class="flex gap-2">
+            <span class="pill bg-indigo-500/15 text-indigo-300 border border-indigo-500/30 flex items-center gap-1">
+              <span>📘</span> Day 1 training
+            </span>
+            <span id="system-status"
+              class="pill bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
+              <span class="relative flex h-2 w-2">
+                <span
+                  class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
+              </span>
+              pipes clear
+            </span>
+          </div>
+        </header>
+
+        <!-- navigation refined -->
+        <nav class="flex space-x-6 mb-6 border-b border-slate-800 text-sm font-medium">
+          <button onclick="showSimTab('simulator-main', this)"
+            class="sim-inner-tab py-2.5 px-1 text-blue-400 border-b-2 border-blue-500">📊 Decision Matrix</button>
+          <button onclick="showSimTab('glossary', this)"
+            class="sim-inner-tab py-2.5 px-1 text-slate-400 hover:text-slate-200 transition">📖 The Glossary</button>
+          <button onclick="showSimTab('summary', this)"
+            class="sim-inner-tab py-2.5 px-1 text-slate-400 hover:text-slate-200 transition">🧠 Chat Summary</button>
+        </nav>
+
+        <!-- simulator main tab -->
+        <div id="simulator-main" class="sim-tab-content active space-y-6">
+          <!-- sim card -->
+          <div class="sim-card p-6">
+            <h2 class="text-xl font-bold mb-5 flex items-center gap-2"><span class="text-blue-500">⏱️</span> Market
+              reaction simulator</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <!-- left: inputs -->
+              <div class="space-y-5">
+                <label class="block">
+                  <span
+                    class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1">🇺🇸
+                    DXY (US Dollar Index)</span>
+                  <select id="dxy-input" onchange="runSimulation()"
+                    class="sim-select mt-1.5 w-full bg-slate-900/70 border border-slate-700 rounded-xl p-2.5 outline-none focus:border-sky-500 text-white">
+                    <option value="neutral">Stable (sideways)</option>
+                    <option value="up">⬆️ Vertical climb (rising)</option>
+                    <option value="down">⬇️ Dumping (falling)</option>
+                  </select>
+                </label>
+                <label class="block">
+                  <span class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1">📈
+                    US10Y (bond yields)</span>
+                  <select id="yield-input" onchange="runSimulation()"
+                    class="sim-select mt-1.5 w-full bg-slate-900/70 border border-slate-700 rounded-xl p-2.5 outline-none focus:border-sky-500 text-white">
+                    <option value="neutral">Flat (yields unchanged)</option>
+                    <option value="up">🔥 Spiking (rates up)</option>
+                    <option value="down">❄️ Falling (rates down)</option>
+                  </select>
+                </label>
+                <label class="block">
+                  <span
+                    class="text-xs font-semibold uppercase tracking-wider text-slate-400 flex items-center gap-1">🌪️
+                    VIX (fear gauge)</span>
+                  <select id="vix-input" onchange="runSimulation()"
+                    class="sim-select mt-1.5 w-full bg-slate-900/70 border border-slate-700 rounded-xl p-2.5 outline-none focus:border-sky-500 text-white">
+                    <option value="low">😌 Sub 20 (calm)</option>
+                    <option value="mid">😐 20 – 30 (elevated)</option>
+                    <option value="high">😱 Above 30 (panic)</option>
+                  </select>
+                </label>
+              </div>
+
+              <!-- right: forecast panel -->
+              <div id="result-box"
+                class="bg-slate-900/60 rounded-2xl p-6 border border-slate-700/80 flex flex-col justify-between min-h-[220px] shadow-inner transition-all duration-250">
+                <div>
+                  <div class="flex flex-wrap justify-between items-center mb-3 gap-2">
+                    <h3 class="font-bold text-lg flex items-center gap-1">🔮 Plumbing forecast</h3>
+                    <span id="price-tag"
+                      class="text-[0.7rem] font-black uppercase bg-slate-800/90 px-3 py-1.5 rounded-full tracking-wide">par
+                      price</span>
+                  </div>
+                  <div id="forecast-text" class="text-sm text-slate-300 leading-relaxed">
+                    Select market conditions to see the predicted flow...
+                  </div>
+                </div>
+                <!-- VIX dynamic warning -->
+                <div id="vix-warning"
+                  class="mt-5 p-3 bg-yellow-900/20 border border-yellow-500/30 rounded-xl text-xs text-yellow-400 hidden items-start gap-2 transition-all duration-250">
+                  <span class="text-lg leading-4">⚠️</span>
+                  <div><strong id="vix-alert-title">VIX WARNING:</strong> <span id="vix-alert-body">Liquidity is
+                      tightening.</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- asset traffic light matrix (improved contrast) -->
+          <div class="sim-card p-6">
+            <h2 class="text-xl font-bold mb-4 flex items-center gap-2"><span class="text-blue-500">🚦</span> Asset
+              impact matrix — traffic lights</h2>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <!-- crypto -->
+              <div
+                class="flex items-center justify-between p-3.5 bg-slate-900/50 rounded-xl border border-slate-800 hover:border-slate-700">
+                <span class="text-sm font-semibold flex items-center gap-2"><span class="text-xl">₿</span> Crypto
+                  (BTC/ETH)</span>
+                <div id="light-crypto" class="indicator-light light-green"></div>
+              </div>
+              <!-- tech stocks -->
+              <div class="flex items-center justify-between p-3.5 bg-slate-900/50 rounded-xl border border-slate-800">
+                <span class="text-sm font-semibold flex items-center gap-2"><span class="text-xl">📱</span> Tech stocks
+                  (NVDA)</span>
+                <div id="light-tech" class="indicator-light light-green"></div>
+              </div>
+              <!-- indices -->
+              <div class="flex items-center justify-between p-3.5 bg-slate-900/50 rounded-xl border border-slate-800">
+                <span class="text-sm font-semibold flex items-center gap-2"><span class="text-xl">📊</span> Indices
+                  (S&P/NAS)</span>
+                <div id="light-indices" class="indicator-light light-green"></div>
+              </div>
+              <!-- futures -->
+              <div class="flex items-center justify-between p-3.5 bg-slate-900/50 rounded-xl border border-slate-800">
+                <span class="text-sm font-semibold flex items-center gap-2"><span class="text-xl">⚡</span> Futures
+                  (leverage)</span>
+                <div id="light-futures" class="indicator-light light-green"></div>
+              </div>
+              <!-- options -->
+              <div class="flex items-center justify-between p-3.5 bg-slate-900/50 rounded-xl border border-slate-800">
+                <span class="text-sm font-semibold flex items-center gap-2"><span class="text-xl">🎲</span> Options
+                  (vol)</span>
+                <div id="light-options" class="indicator-light light-green"></div>
+              </div>
+              <!-- commodities -->
+              <div class="flex items-center justify-between p-3.5 bg-slate-900/50 rounded-xl border border-slate-800">
+                <span class="text-sm font-semibold flex items-center gap-2"><span class="text-xl">🏆</span> Commodities
+                  (Gold)</span>
+                <div id="light-commodities" class="indicator-light light-green"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- KPI bar with realtime classes -->
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="sim-card p-4 text-center">
+              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider">risk level</p>
+              <p id="risk-val" class="text-2xl font-bold mt-1 text-slate-200 transition-colors duration-200">MODERATE
+              </p>
+            </div>
+            <div class="sim-card p-4 text-center">
+              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider">liquidity status</p>
+              <p id="liq-val" class="text-2xl font-bold mt-1 text-slate-200 transition-colors duration-200">STABLE</p>
+            </div>
+            <div class="sim-card p-4 text-center">
+              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider">bond price status</p>
+              <p id="pricing-status" class="text-2xl font-bold mt-1 text-blue-400 transition-colors duration-200">AT PAR
+              </p>
+            </div>
+            <div class="sim-card p-4 text-center">
+              <p class="text-xs text-slate-500 uppercase font-bold tracking-wider">market makers</p>
+              <p id="mm-status" class="text-2xl font-bold mt-1 text-blue-400 transition-colors duration-200">PROVIDING
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- glossary tab -->
+        <div id="glossary" class="sim-tab-content hidden space-y-8">
+          <div class="sim-card p-6">
+            <h2
+              class="text-lg font-bold mb-5 text-slate-300 border-b border-slate-700 pb-2 uppercase tracking-widest text-xs flex items-center gap-2">
+              📚 glossary & asset impact</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div class="p-4 bg-slate-900/40 rounded-xl border border-slate-800/70">
+                <h3 class="font-bold text-sky-400 uppercase text-xs mb-2 tracking-wide">₿ Crypto (the canary)</h3>
+                <p class="text-xs text-slate-300 leading-relaxed">Highly sensitive to <span
+                    class="text-amber-400 font-medium">DXY</span>. 24/7 liquidity — first to dump when institutions face
+                  bond paper losses. If yields spike, BTC 'wicks' down as liquidity vanishes.</p>
+              </div>
+              <div class="p-4 bg-slate-900/40 rounded-xl border border-slate-800/70">
+                <h3 class="font-bold text-sky-400 uppercase text-xs mb-2 tracking-wide">📈 Indices & stocks</h3>
+                <p class="text-xs text-slate-300 leading-relaxed">Yields = discount rate. Higher yields = future profits
+                  worth less <span class="text-amber-400">today</span>. Tech & growth hit hardest (long-duration cash
+                  flows).</p>
+              </div>
+              <div class="p-4 bg-slate-900/40 rounded-xl border-l-4 border-orange-500/70">
+                <h3 class="font-bold text-orange-300 uppercase text-xs mb-2 tracking-wide">⚡ Futures & options</h3>
+                <p class="text-xs text-slate-300 leading-relaxed"><span class="text-orange-300">Futures:</span> high VIX
+                  widens spreads → traders stopped out. <span class="text-orange-300">Options:</span> VIX pumps IV,
+                  premiums expand, vol trades get interesting.</p>
+              </div>
+              <div class="p-4 bg-slate-900/40 rounded-xl border border-slate-800/70">
+                <h3 class="font-bold text-sky-400 uppercase text-xs mb-2 tracking-wide">🏅 Commodities</h3>
+                <p class="text-xs text-slate-300 leading-relaxed">Typically inverse to DXY. Strong dollar = weaker
+                  gold/oil. In true systemic stress, gold can decouple as final store of value.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- summary tab -->
+        <div id="summary" class="sim-tab-content hidden sim-card p-6">
+          <h2 class="text-xl font-bold mb-4 border-b border-slate-700 pb-2 flex items-center gap-2">🧾 Training summary:
+            day 1</h2>
+          <ul class="space-y-4 text-sm text-slate-300">
+            <li class="flex gap-4 items-start"><span
+                class="text-sky-400 font-bold text-base min-w-[2rem]">01.</span><span><span
+                  class="font-semibold text-white">The core inverse:</span> Bond prices and yields move opposite.
+                Spiking yields = bond discounts; falling yields = bond premiums.</span></li>
+            <li class="flex gap-4 items-start"><span
+                class="text-sky-400 font-bold text-base min-w-[2rem]">02.</span><span><span
+                  class="font-semibold text-white">The VIX accelerant:</span> High VIX makes market makers widen spreads
+                → 'clogged pipes' become lethal for leveraged traders.</span></li>
+            <li class="flex gap-4 items-start"><span
+                class="text-sky-400 font-bold text-base min-w-[2rem]">03.</span><span><span
+                  class="font-semibold text-white">The DXY vacuum:</span> Rising dollar pulls liquidity, forcing
+                leveraged loops to unwind — crypto & risk assets crash.</span></li>
+          </ul>
+          <div class="mt-6 text-xs text-slate-500 bg-slate-900/30 p-3 rounded-lg italic">→ use the simulator to see
+            these dynamics in realtime.</div>
+        </div>
+
+        <footer class="mt-10 text-center text-slate-600 text-xs border-t border-slate-800/60 pt-6 pb-12">
+          <p>Antigravity Dashboard v1.8 · built with AI for macro plumbing training · <span
+              class="text-slate-500">#liquidity layers</span></p>
+        </footer>
       </div>
-      <div class="controls">
-        <div class="control-group">
-          <label>Maturity:</label>
-          <div class="button-group" id="maturity-toggles">
-            <button class="toggle-btn" data-val="y2">2Y</button>
-            <button class="toggle-btn active" data-val="y10">10Y</button>
-            <button class="toggle-btn" data-val="y30">30Y</button>
-          </div>
-        </div>
-        <div class="control-group">
-          <label>Timeframe:</label>
-          <div class="button-group" id="timeframe-toggles">
-            <button class="toggle-btn active" data-val="1D">1D</button>
-            <button class="toggle-btn" data-val="1W">1W</button>
-            <button class="toggle-btn" data-val="1M">1M</button>
-            <button class="toggle-btn" data-val="1Y">1Y</button>
-          </div>
-        </div>
-      </div>
-    </header>
-
-    <main class="main-content">
-      <!-- Left Sidebar: Metric Cards -->
-      <aside class="metrics-sidebar">
-        <!-- US Card -->
-        <div class="metric-card" id="card-us">
-          <div class="card-header">
-            <h3>United States</h3>
-            <span class="flag">🇺🇸</span>
-          </div>
-          <div class="primary-metric">
-            <span class="value" id="us-val">--</span>
-            <span class="unit">%</span>
-          </div>
-          <p class="subtitle">Current Yield</p>
-
-          <div class="progress-bar-container">
-            <div class="progress-bar" style="width: 75%; background-color: var(--color-us);"></div>
-          </div>
-
-          <div class="secondary-metrics">
-            <div class="sub-metric">
-              <span class="label">Curve Shape</span>
-              <span class="val" id="us-curve">Normal</span>
-            </div>
-            <div class="sub-metric">
-              <span class="label">1D Delta</span>
-              <span class="val delta down" id="us-delta">-4 bps</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- UK Card -->
-        <div class="metric-card" id="card-uk">
-          <div class="card-header">
-            <h3>United Kingdom</h3>
-            <span class="flag">🇬🇧</span>
-          </div>
-          <div class="primary-metric">
-            <span class="value" id="uk-val">--</span>
-            <span class="unit">%</span>
-          </div>
-          <p class="subtitle">Current Yield</p>
-
-          <div class="progress-bar-container">
-            <div class="progress-bar" style="width: 80%; background-color: var(--color-uk);"></div>
-          </div>
-
-          <div class="secondary-metrics">
-            <div class="sub-metric">
-              <span class="label">Curve Shape</span>
-              <span class="val" id="uk-curve">Normal</span>
-            </div>
-            <div class="sub-metric">
-              <span class="label">1D Delta</span>
-              <span class="val delta down" id="uk-delta">-4 bps</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- EU Card -->
-        <div class="metric-card" id="card-eu">
-          <div class="card-header">
-            <h3>European Union</h3>
-            <span class="flag">🇪🇺</span>
-          </div>
-          <div class="primary-metric">
-            <span class="value" id="eu-val">--</span>
-            <span class="unit">%</span>
-          </div>
-          <p class="subtitle">Current Yield (Germany)</p>
-
-          <div class="progress-bar-container">
-            <div class="progress-bar" style="width: 60%; background-color: var(--color-eu);"></div>
-          </div>
-
-          <div class="secondary-metrics">
-            <div class="sub-metric">
-              <span class="label">Curve Shape</span>
-              <span class="val" id="eu-curve">Normal</span>
-            </div>
-            <div class="sub-metric">
-              <span class="label">1D Delta</span>
-              <span class="val delta down" id="eu-delta">-1 bps</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- JP Card -->
-        <div class="metric-card" id="card-jp">
-          <div class="card-header">
-            <h3>Japan</h3>
-            <span class="flag">🇯🇵</span>
-          </div>
-          <div class="primary-metric">
-            <span class="value" id="jp-val">--</span>
-            <span class="unit">%</span>
-          </div>
-          <p class="subtitle">Current Yield</p>
-
-          <div class="progress-bar-container">
-            <div class="progress-bar" style="width: 45%; background-color: var(--color-jp);"></div>
-          </div>
-
-          <div class="secondary-metrics">
-            <div class="sub-metric">
-              <span class="label">Curve Shape</span>
-              <span class="val" id="jp-curve">Normal</span>
-            </div>
-            <div class="sub-metric">
-              <span class="label">1D Delta</span>
-              <span class="val delta down" id="jp-delta">-2 bps</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- BTC Card -->
-        <div class="metric-card" id="card-btc">
-          <div class="card-header">
-            <h3>Bitcoin</h3>
-            <span class="flag">₿</span>
-          </div>
-          <div class="primary-metric">
-            <span class="unit">$</span>
-            <span class="value" id="btc-val">--</span>
-          </div>
-          <p class="subtitle">Current Price</p>
-
-          <div class="progress-bar-container">
-            <div class="progress-bar" style="width: 50%; background-color: var(--color-btc);"></div>
-          </div>
-
-          <div class="secondary-metrics">
-            <div class="sub-metric">
-              <span class="label">24H Change</span>
-              <span class="val delta up" id="btc-delta">+--%</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- SPX Card -->
-        <div class="metric-card" id="card-spx">
-          <div class="card-header">
-            <h3>S&P 500</h3>
-            <span class="flag">📈</span>
-          </div>
-          <div class="primary-metric">
-            <span class="unit">$</span>
-            <span class="value" id="spx-val">--</span>
-          </div>
-          <p class="subtitle">Current Index</p>
-
-          <div class="progress-bar-container">
-            <div class="progress-bar" style="width: 50%; background-color: var(--color-spx);"></div>
-          </div>
-
-          <div class="secondary-metrics">
-            <div class="sub-metric">
-              <span class="label">1D Change</span>
-              <span class="val delta up" id="spx-delta">+--%</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- NDAQ Card -->
-        <div class="metric-card" id="card-ndaq">
-          <div class="card-header">
-            <h3>Nasdaq</h3>
-            <span class="flag">🚀</span>
-          </div>
-          <div class="primary-metric">
-            <span class="unit">$</span>
-            <span class="value" id="ndaq-val">--</span>
-          </div>
-          <p class="subtitle">Current Index</p>
-
-          <div class="progress-bar-container">
-            <div class="progress-bar" style="width: 50%; background-color: var(--color-ndaq);"></div>
-          </div>
-
-          <div class="secondary-metrics">
-            <div class="sub-metric">
-              <span class="label">1D Change</span>
-              <span class="val delta up" id="ndaq-delta">+--%</span>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Right Main: Chart Area -->
-      <section class="chart-section">
-        <div class="chart-header">
-          <h2 id="chart-title">10Y Sovereign Yields</h2>
-          <div class="legend-custom">
-            <span class="legend-item" data-dataset="0"><span class="color-box"
-                style="background: var(--color-us)"></span> US</span>
-            <span class="legend-item" data-dataset="1"><span class="color-box"
-                style="background: var(--color-uk)"></span> UK</span>
-            <span class="legend-item" data-dataset="2"><span class="color-box"
-                style="background: var(--color-eu)"></span> EU</span>
-            <span class="legend-item" data-dataset="3"><span class="color-box"
-                style="background: var(--color-jp)"></span> JP</span>
-            <span class="legend-item hidden" data-dataset="4"><span class="color-box"
-                style="background: var(--color-btc)"></span> BTC</span>
-            <span class="legend-item hidden" data-dataset="5"><span class="color-box"
-                style="background: var(--color-spx)"></span> SPX</span>
-            <span class="legend-item hidden" data-dataset="6"><span class="color-box"
-                style="background: var(--color-ndaq)"></span> NDAQ</span>
-          </div>
-        </div>
-        <div class="chart-container">
-          <canvas id="yieldChart"></canvas>
-        </div>
-      </section>
-    </main>
+    </div>
   </div>
 
   <script src="script.js"></script>
