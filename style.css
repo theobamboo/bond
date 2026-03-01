@@ -16,6 +16,12 @@
   /* Pink/Red */
   --color-jp: #a06bd8;
   /* Purple */
+  --color-btc: #f7931a;
+  /* Orange */
+  --color-spx: #0ea5e9;
+  /* Blue */
+  --color-ndaq: #22c55e;
+  /* Green */
 
   --color-up: #4ade80;
   --color-down: #f87171;
@@ -137,6 +143,27 @@ h1 {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  overflow-y: auto;
+  max-height: calc(100vh - 100px);
+  padding-right: 4px;
+}
+
+/* Custom Scrollbar for sidebar */
+.metrics-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.metrics-sidebar::-webkit-scrollbar-track {
+  background: var(--bg-dark);
+}
+
+.metrics-sidebar::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 3px;
+}
+
+.metrics-sidebar::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
 
 .metric-card {

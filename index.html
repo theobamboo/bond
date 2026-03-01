@@ -165,6 +165,78 @@
             </div>
           </div>
         </div>
+
+        <!-- BTC Card -->
+        <div class="metric-card" id="card-btc">
+          <div class="card-header">
+            <h3>Bitcoin</h3>
+            <span class="flag">₿</span>
+          </div>
+          <div class="primary-metric">
+            <span class="unit">$</span>
+            <span class="value" id="btc-val">--</span>
+          </div>
+          <p class="subtitle">Current Price</p>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 50%; background-color: var(--color-btc);"></div>
+          </div>
+
+          <div class="secondary-metrics">
+            <div class="sub-metric">
+              <span class="label">24H Change</span>
+              <span class="val delta up" id="btc-delta">+--%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SPX Card -->
+        <div class="metric-card" id="card-spx">
+          <div class="card-header">
+            <h3>S&P 500</h3>
+            <span class="flag">📈</span>
+          </div>
+          <div class="primary-metric">
+            <span class="unit">$</span>
+            <span class="value" id="spx-val">--</span>
+          </div>
+          <p class="subtitle">Current Index</p>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 50%; background-color: var(--color-spx);"></div>
+          </div>
+
+          <div class="secondary-metrics">
+            <div class="sub-metric">
+              <span class="label">1D Change</span>
+              <span class="val delta up" id="spx-delta">+--%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- NDAQ Card -->
+        <div class="metric-card" id="card-ndaq">
+          <div class="card-header">
+            <h3>Nasdaq</h3>
+            <span class="flag">🚀</span>
+          </div>
+          <div class="primary-metric">
+            <span class="unit">$</span>
+            <span class="value" id="ndaq-val">--</span>
+          </div>
+          <p class="subtitle">Current Index</p>
+
+          <div class="progress-bar-container">
+            <div class="progress-bar" style="width: 50%; background-color: var(--color-ndaq);"></div>
+          </div>
+
+          <div class="secondary-metrics">
+            <div class="sub-metric">
+              <span class="label">1D Change</span>
+              <span class="val delta up" id="ndaq-delta">+--%</span>
+            </div>
+          </div>
+        </div>
       </aside>
 
       <!-- Right Main: Chart Area -->
@@ -180,6 +252,12 @@
                 style="background: var(--color-eu)"></span> EU</span>
             <span class="legend-item" data-dataset="3"><span class="color-box"
                 style="background: var(--color-jp)"></span> JP</span>
+            <span class="legend-item hidden" data-dataset="4"><span class="color-box"
+                style="background: var(--color-btc)"></span> BTC</span>
+            <span class="legend-item hidden" data-dataset="5"><span class="color-box"
+                style="background: var(--color-spx)"></span> SPX</span>
+            <span class="legend-item hidden" data-dataset="6"><span class="color-box"
+                style="background: var(--color-ndaq)"></span> NDAQ</span>
           </div>
         </div>
         <div class="chart-container">
